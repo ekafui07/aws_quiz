@@ -4,396 +4,213 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWS Networking & VPC Practice Quiz</title>
+
+    <!-- Tailwind CSS (utility classes) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PDF.js library for client-side PDF parsing -->
+
+    <!-- PDF.js (client-side PDF parsing) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Loader animation */
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #f97316; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;}
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="h-screen flex items-center justify-center p-4">
 
     <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
-        <!-- Header -->
-        <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white shrink-0">
-            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="location.reload()" title="Reset and return home">
+
+        <!-- ================================================================
+             Header
+             ================================================================ -->
+        <header class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white shrink-0">
+
+            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                 onclick="location.reload()"
+                 title="Reset and return home">
+
                 <div class="bg-orange-500 p-2 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
                 </div>
+
                 <div>
                     <h1 class="font-bold text-lg leading-tight">AI-Powered PDF Quiz</h1>
                     <p class="text-xs text-slate-400 font-medium" id="header-subtitle">Default AWS VPC Prep</p>
                 </div>
             </div>
-            <div id="score-display" class="hidden text-sm font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
-                Score: <span id="current-score" class="text-orange-400">0</span> / <span id="total-qs">20</span>
-            </div>
-        </div>
 
-        <!-- Dynamic Content Area -->
-        <div id="app-container" class="p-6 sm:p-8 flex flex-col flex-1 overflow-y-auto">
-            
-            <!-- Start Screen -->
-            <div id="start-screen" class="text-center fade-in space-y-8 my-auto">
+            <div id="score-display" class="hidden text-sm font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
+                Score: <span id="current-score" class="text-orange-400">0</span>
+                     / <span id="total-qs">20</span>
+            </div>
+
+        </header>
+
+        <!-- ================================================================
+             Dynamic Content Area
+             ================================================================ -->
+        <main id="app-container" class="p-6 sm:p-8 flex flex-col flex-1 overflow-y-auto">
+
+            <!-- ------------------------------------------------------------
+                 Start Screen
+                 ------------------------------------------------------------ -->
+            <section id="start-screen" class="text-center fade-in space-y-8 my-auto">
+
                 <div>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Ready to test your knowledge?</h2>
-                    <p class="text-slate-600 max-w-lg mx-auto">Use the default 20-question AWS VPC quiz, or upload a custom exam dump. The AI will read the PDF and instantly generate an interactive quiz.</p>
+                    <p class="text-slate-600 max-w-lg mx-auto">
+                        Use the default 20-question AWS VPC quiz, or upload a custom exam dump.
+                        The AI will read the PDF and instantly generate an interactive quiz.
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    <!-- Default Quiz Button -->
+
+                    <!-- Default Quiz Card -->
                     <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-center hover:border-slate-300 transition-colors">
                         <div class="w-12 h-12 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
                         </div>
                         <h3 class="font-bold text-slate-800 mb-2">AWS VPC Default</h3>
                         <p class="text-xs text-slate-500 mb-4 h-8">20 Built-in Networking Questions</p>
-                        <button onclick="startQuiz(false)" class="w-full bg-slate-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
+                        <button id="btn-start-default"
+                                class="w-full bg-slate-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
                             Start Default Quiz
                         </button>
                     </div>
 
-                    <!-- PDF Upload Area -->
+                    <!-- PDF Upload Card -->
                     <div class="bg-orange-50 border border-orange-200 rounded-xl p-6 flex flex-col items-center justify-center relative hover:border-orange-300 transition-colors">
-                        <input type="file" id="pdf-upload" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handlePDFUpload(event)">
+                        <input type="file"
+                               id="pdf-upload"
+                               accept=".pdf"
+                               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                               aria-label="Upload a PDF exam dump">
                         <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
                         </div>
                         <h3 class="font-bold text-orange-800 mb-2">Upload Custom PDF</h3>
                         <p class="text-xs text-orange-600/70 mb-4 h-8">AI automatically finds questions!</p>
-                        <button id="pdf-btn-label" class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-orange-600 transition-colors pointer-events-none">
+                        <button id="pdf-btn-label"
+                                class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-orange-600 transition-colors pointer-events-none">
                             Select PDF File
                         </button>
                     </div>
-                </div>
-                
-                <p id="upload-error" class="text-rose-500 text-sm font-bold hidden"></p>
-            </div>
 
-            <!-- Question Screen -->
-            <div id="question-screen" class="hidden flex-col h-full fade-in">
+                </div>
+
+                <p id="upload-error" class="text-rose-500 text-sm font-bold hidden" role="alert"></p>
+
+            </section>
+
+            <!-- ------------------------------------------------------------
+                 Question Screen
+                 ------------------------------------------------------------ -->
+            <section id="question-screen" class="hidden flex-col h-full fade-in">
+
                 <div class="flex justify-between items-end mb-6">
-                    <span id="question-counter" class="text-sm font-bold text-slate-400 uppercase tracking-wider">Question 1 of x</span>
-                </div>
-                
-                <h3 id="question-text" class="text-xl font-bold text-slate-800 mb-6 leading-relaxed"></h3>
-                
-                <div id="options-container" class="space-y-3 mb-6">
-                    <!-- Options injected here -->
+                    <span id="question-counter" class="text-sm font-bold text-slate-400 uppercase tracking-wider">
+                        Question 1 of x
+                    </span>
                 </div>
 
-                <!-- Feedback Area -->
-                <div id="feedback-area" class="hidden rounded-xl p-5 mb-6 border">
+                <h2 id="question-text" class="text-xl font-bold text-slate-800 mb-6 leading-relaxed"></h2>
+
+                <div id="options-container" class="space-y-3 mb-6">
+                    <!-- Options injected by quiz.js -->
+                </div>
+
+                <!-- Feedback -->
+                <div id="feedback-area" class="hidden" role="status" aria-live="polite">
                     <div class="flex items-start gap-3">
                         <div id="feedback-icon" class="mt-0.5 shrink-0"></div>
                         <div>
-                            <h4 id="feedback-title" class="font-bold text-lg mb-1"></h4>
+                            <h3 id="feedback-title" class="feedback-title"></h3>
                             <p id="feedback-text" class="text-sm text-slate-700"></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-auto flex justify-end">
-                    <button id="btn-next" onclick="nextQuestion()" class="hidden bg-slate-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-slate-800 transition-colors">
-                        Next Question &rarr;
+                    <button id="btn-next"
+                            class="hidden bg-slate-900 text-white font-bold py-3 px-8 rounded-xl hover:bg-slate-800 transition-colors">
+                        Next Question →
                     </button>
                 </div>
-            </div>
 
-            <!-- Results Screen -->
-            <div id="results-screen" class="hidden text-center fade-in my-auto">
-                <div class="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6" id="result-icon-bg">
+            </section>
+
+            <!-- ------------------------------------------------------------
+                 Results Screen
+                 ------------------------------------------------------------ -->
+            <section id="results-screen" class="hidden text-center fade-in my-auto">
+
+                <div class="result-icon-bg" id="result-icon-bg">
                     <span id="result-emoji" class="text-4xl"></span>
                 </div>
+
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Quiz Complete!</h2>
-                <p class="text-slate-600 mb-6">You scored <span id="final-score" class="font-bold text-2xl text-slate-900 mx-1"></span> out of <span id="final-total"></span>.</p>
-                
+                <p class="text-slate-600 mb-6">
+                    You scored
+                    <span id="final-score"  class="font-bold text-2xl text-slate-900 mx-1"></span>
+                    out of
+                    <span id="final-total"></span>.
+                </p>
+
                 <div class="flex justify-center gap-4 mt-8">
-                    <button onclick="location.reload()" class="bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl hover:bg-slate-300 transition-colors">
+                    <button onclick="location.reload()"
+                            class="bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl hover:bg-slate-300 transition-colors">
                         Go Home / Try Another
                     </button>
                 </div>
-            </div>
 
-        </div>
+            </section>
+
+        </main>
     </div>
 
-<script>
-    // Set up PDF.js worker
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    <!-- ==================================================================
+         Scripts (order matters: data → AI helpers → quiz engine)
+         ================================================================== -->
+    <script src="js/questions.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/quiz.js"></script>
+    <script>
+        // ----------------------------------------------------------------
+        // App bootstrap — wire up events after DOM + scripts are loaded.
+        // Kept minimal: no logic lives here, only event binding.
+        // ----------------------------------------------------------------
 
-    // The default questions
-    const defaultQuestions = [
-        {
-            q: "Which AWS service allows you to provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define?",
-            options: ["Amazon Route 53", "AWS Direct Connect", "Amazon Virtual Private Cloud (VPC)", "Amazon CloudFront"],
-            answer: 2,
-            explanation: "Amazon VPC lets you provision a logically isolated section of the AWS Cloud."
-        },
-        {
-            q: "True or False: A single subnet can span across multiple Availability Zones (AZs).",
-            options: ["True", "False"],
-            answer: 1,
-            explanation: "False. A subnet must reside entirely within ONE Availability Zone."
-        },
-        {
-            q: "You are deploying the frontend of your Kakos Audit Tool and want it to be accessible from the internet. Which component must be attached to your VPC?",
-            options: ["NAT Gateway", "Internet Gateway", "Virtual Private Gateway", "Transit Gateway"],
-            answer: 1,
-            explanation: "An Internet Gateway (IGW) allows two-way communication between instances in your VPC and the internet."
-        },
-        {
-            q: "Which component acts as a 'stateless' virtual firewall for your entire Subnet?",
-            options: ["Network ACL", "Security Group", "IAM Policy", "VPC Flow Logs"],
-            answer: 0,
-            explanation: "Network ACLs (NACLs) act at the subnet level and are stateless."
-        }
-    ];
+        // PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
-    let activeQuestions = [];
-    let currentQuestion = 0;
-    let score = 0;
-    let answered = false;
+        // Button listeners (replaces inline onclick attributes)
+        document.getElementById("btn-start-default").addEventListener("click", () => startQuiz(false));
+        document.getElementById("pdf-upload").addEventListener("change", handlePDFUpload);
+        document.getElementById("btn-next").addEventListener("click", nextQuestion);
+    </script>
 
-    // --- AI PARSING LOGIC ---
-    async function extractQuestionsWithAI(text) {
-        const apiKey = "AIzaSyBVvyjmU9e4nIKBXCU0YHmRTxjn_kBmg0g"; // Using provided personal API key
-        
-        // Dynamically select the model: Use the public model if a personal key is provided, 
-        // otherwise fallback to the preview model required by the canvas environment.
-        const modelName = apiKey ? "gemini-2.5-flash" : "gemini-2.5-flash-preview-09-2025";
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
-        const systemPrompt = `You are a quiz generation engine. Your goal is to extract multiple-choice questions from the provided messy PDF text (like an exam dump).
-        Rules:
-        1. Identify questions, options, and the correct answer.
-        2. Often in exam dumps, the incorrect options have explanations right below them, while the correct answer has an explanation labelled "Correct Answer Explanation" at the bottom. Use these hints to figure out the right answer.
-        3. Extract ALL multiple-choice questions found in the text (extract up to 50 questions).
-        4. Provide the correct answer as an integer index (0-based) corresponding to the correct option.
-        5. Provide a short, clear explanation.`;
-
-        const payload = {
-            contents: [{ parts: [{ text: text }] }],
-            systemInstruction: { parts: [{ text: systemPrompt }] },
-            generationConfig: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: "ARRAY",
-                    items: {
-                        type: "OBJECT",
-                        properties: {
-                            q: { type: "STRING", description: "The question text" },
-                            options: {
-                                type: "ARRAY",
-                                items: { type: "STRING" },
-                                description: "Array of possible answers"
-                            },
-                            answer: { type: "INTEGER", description: "Index of the correct option (0-based)" },
-                            explanation: { type: "STRING", description: "Explanation of why the answer is correct" }
-                        },
-                        required: ["q", "options", "answer", "explanation"]
-                    }
-                }
-            }
-        };
-
-        const retries = 5;
-        const delays = [1000, 2000, 4000, 8000, 16000];
-
-        for (let i = 0; i < retries; i++) {
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
-                }
-
-                const result = await response.json();
-                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if (!jsonText) throw new Error("Empty response from AI");
-
-                return JSON.parse(jsonText);
-            } catch (error) {
-                if (i === retries - 1) throw error;
-                await new Promise(res => setTimeout(res, delays[i]));
-            }
-        }
-    }
-
-    async function handlePDFUpload(event) {
-        const file = event.target.files[0];
-        if (!file || file.type !== "application/pdf") return;
-
-        const btnLabel = document.getElementById('pdf-btn-label');
-        const errorMsg = document.getElementById('upload-error');
-        
-        btnLabel.innerHTML = '<span class="loader"></span> Reading & Generating...';
-        errorMsg.classList.add('hidden');
-
-        try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            
-            let fullText = "";
-            // Increased limits to read more questions from larger PDFs
-            const pagesToRead = Math.min(pdf.numPages, 40);
-            for (let i = 1; i <= pagesToRead; i++) {
-                const page = await pdf.getPage(i);
-                const content = await page.getTextContent();
-                const strings = content.items.map(item => item.str);
-                fullText += strings.join(" ") + "\n";
-            }
-
-            // Let AI parse the messy text (increased character limit to process more questions)
-            const parsedQuestions = await extractQuestionsWithAI(fullText.substring(0, 150000));
-            
-            if (!parsedQuestions || parsedQuestions.length === 0) {
-                throw new Error("Could not extract any questions from the provided PDF.");
-            }
-
-            // Success! Load the custom questions
-            activeQuestions = parsedQuestions;
-            document.getElementById('header-subtitle').textContent = `Custom AI Quiz: ${file.name.substring(0, 15)}...`;
-            startQuiz(true);
-
-        } catch (error) {
-            console.error(error);
-            errorMsg.textContent = "Error: " + error.message;
-            errorMsg.classList.remove('hidden');
-            btnLabel.textContent = 'Select PDF File';
-        }
-    }
-
-    // --- QUIZ UI LOGIC ---
-
-    function startQuiz(isCustom) {
-        if (!isCustom) {
-            activeQuestions = defaultQuestions;
-        }
-
-        document.getElementById('total-qs').textContent = activeQuestions.length;
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('question-screen').classList.remove('hidden');
-        document.getElementById('question-screen').classList.add('flex');
-        document.getElementById('score-display').classList.remove('hidden');
-        loadQuestion();
-    }
-
-    function loadQuestion() {
-        answered = false;
-        const q = activeQuestions[currentQuestion];
-        
-        document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of ${activeQuestions.length}`;
-        document.getElementById('question-text').textContent = q.q;
-        
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
-        
-        q.options.forEach((opt, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 transition-all font-medium text-slate-700';
-            // Simple mapping A, B, C, D...
-            const letter = String.fromCharCode(65 + index);
-            btn.innerHTML = `<span class="inline-block w-6 font-bold text-slate-400 mr-2">${letter}.</span> ${opt}`;
-            btn.onclick = () => checkAnswer(index, btn);
-            optionsContainer.appendChild(btn);
-        });
-
-        document.getElementById('feedback-area').classList.add('hidden');
-        document.getElementById('btn-next').classList.add('hidden');
-    }
-
-    function checkAnswer(selectedIndex, selectedBtn) {
-        if (answered) return;
-        answered = true;
-
-        const q = activeQuestions[currentQuestion];
-        const isCorrect = selectedIndex === q.answer;
-        const buttons = document.getElementById('options-container').children;
-
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].disabled = true;
-            if (i === q.answer) {
-                buttons[i].className = 'w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-medium text-emerald-800 transition-all';
-            } else if (i === selectedIndex && !isCorrect) {
-                buttons[i].className = 'w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 font-medium text-rose-800 transition-all';
-            } else {
-                buttons[i].className = 'w-full text-left p-4 rounded-xl border-2 border-slate-100 bg-slate-50 font-medium text-slate-400 transition-all opacity-50';
-            }
-        }
-
-        const feedbackArea = document.getElementById('feedback-area');
-        const feedbackTitle = document.getElementById('feedback-title');
-        const feedbackText = document.getElementById('feedback-text');
-        const feedbackIcon = document.getElementById('feedback-icon');
-
-        feedbackArea.classList.remove('hidden');
-
-        if (isCorrect) {
-            score++;
-            document.getElementById('current-score').textContent = score;
-            feedbackArea.className = 'rounded-xl p-5 mb-6 border border-emerald-200 bg-emerald-50 fade-in';
-            feedbackTitle.className = 'font-bold text-lg mb-1 text-emerald-800';
-            feedbackTitle.textContent = 'Correct!';
-            feedbackIcon.innerHTML = `<svg class="text-emerald-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-        } else {
-            feedbackArea.className = 'rounded-xl p-5 mb-6 border border-rose-200 bg-rose-50 fade-in';
-            feedbackTitle.className = 'font-bold text-lg mb-1 text-rose-800';
-            feedbackTitle.textContent = 'Incorrect';
-            feedbackIcon.innerHTML = `<svg class="text-rose-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
-        }
-
-        feedbackText.textContent = q.explanation || `The correct answer was Option ${String.fromCharCode(65 + q.answer)}.`;
-        
-        const btnNext = document.getElementById('btn-next');
-        btnNext.classList.remove('hidden');
-        btnNext.textContent = currentQuestion === activeQuestions.length - 1 ? 'Finish Quiz' : 'Next Question \u2192';
-    }
-
-    function nextQuestion() {
-        currentQuestion++;
-        if (currentQuestion < activeQuestions.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }
-
-    function showResults() {
-        document.getElementById('question-screen').classList.add('hidden');
-        document.getElementById('question-screen').classList.remove('flex');
-        document.getElementById('score-display').classList.add('hidden');
-        document.getElementById('results-screen').classList.remove('hidden');
-
-        document.getElementById('final-score').textContent = score;
-        document.getElementById('final-total').textContent = activeQuestions.length;
-        
-        const iconBg = document.getElementById('result-icon-bg');
-        const emoji = document.getElementById('result-emoji');
-        const percentage = (score / activeQuestions.length) * 100;
-
-        if (percentage >= 80) {
-            iconBg.className = 'w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 bg-emerald-100';
-            emoji.textContent = '🏆';
-        } else if (percentage >= 50) {
-            iconBg.className = 'w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 bg-amber-100';
-            emoji.textContent = '👍';
-        } else {
-            iconBg.className = 'w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-6 bg-rose-100';
-            emoji.textContent = '📚';
-        }
-    }
-</script>
 </body>
 </html>

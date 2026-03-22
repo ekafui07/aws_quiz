@@ -1,0 +1,154 @@
+/* ==========================================================================
+   styles.css
+   Custom styles for the AWS Quiz App.
+   Tailwind utility classes handle the bulk of layout and spacing.
+   This file covers: animations, custom component states, and overrides.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+}
+
+
+/* --------------------------------------------------------------------------
+   Animations
+   -------------------------------------------------------------------------- */
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top-color: #f97316;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+
+/* --------------------------------------------------------------------------
+   Option buttons
+   -------------------------------------------------------------------------- */
+
+.option-btn {
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid #e2e8f0;
+    background-color: #fff;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.option-btn:hover {
+    border-color: #94a3b8;
+    background-color: #f8fafc;
+}
+
+.option-btn .option-letter {
+    display: inline-block;
+    width: 1.5rem;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-right: 0.5rem;
+}
+
+/* Answer revealed states */
+.option-btn.correct {
+    border-color: #10b981;
+    background-color: #ecfdf5;
+    color: #065f46;
+    cursor: default;
+}
+
+.option-btn.incorrect {
+    border-color: #f43f5e;
+    background-color: #fff1f2;
+    color: #9f1239;
+    cursor: default;
+}
+
+.option-btn.dimmed {
+    border-color: #f1f5f9;
+    background-color: #f8fafc;
+    color: #94a3b8;
+    opacity: 0.5;
+    cursor: default;
+}
+
+
+/* --------------------------------------------------------------------------
+   Feedback area
+   -------------------------------------------------------------------------- */
+
+#feedback-area {
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-width: 1px;
+}
+
+.feedback-correct {
+    border-color: #a7f3d0;
+    background-color: #ecfdf5;
+}
+
+.feedback-incorrect {
+    border-color: #fecdd3;
+    background-color: #fff1f2;
+}
+
+.feedback-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+}
+
+.feedback-title.correct  { color: #065f46; }
+.feedback-title.incorrect { color: #9f1239; }
+
+.icon-correct  { color: #10b981; }
+.icon-incorrect { color: #f43f5e; }
+
+
+/* --------------------------------------------------------------------------
+   Results screen
+   -------------------------------------------------------------------------- */
+
+.result-icon-bg {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-pass    { background-color: #d1fae5; }
+.result-average { background-color: #fef3c7; }
+.result-fail    { background-color: #ffe4e6; }
